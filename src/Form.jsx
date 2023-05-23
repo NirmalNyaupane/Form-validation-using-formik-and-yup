@@ -1,12 +1,13 @@
 import Image from "./assets/Images/Side.jpg";
 import { useFormik } from "formik";
 import FormValidation from "./Schema";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { createContext } from "react";
+export const userContext = createContext(null);
 
-
-const Form = () =>{
+const Form = ({Children}) => {
   const navigate = useNavigate();
-    const { values, handleSubmit, handleChange, errors, touched, handleBlur } =
+  const { values, handleSubmit, handleChange, errors, touched, handleBlur } =
     useFormik({
       initialValues: {
         name: "",
@@ -15,23 +16,26 @@ const Form = () =>{
         checkbox: "",
       },
 
-      onSubmit: (value) => {      
-        console.log("🚀 ~ file: Form.jsx:24 ~ Form ~ value:", value);
-        navigate(`/sucess?name=${values.name}&email=${values.email}`);
+      onSubmit: (value) => {
+        navigate(`/sucess`);
       },
 
       validationSchema: FormValidation,
     });
 
+
   return (
     <>
+    <userContext.Provider value={values}>
+      {Children}
+    </userContext.Provider>  
       <section className="container h-screen min-w-full bg-emerald-500 flex justify-center items-center">
         {/* Side image secton */}
 
         <div
           className="form-conainer flex flex-col
-              md:flex-row-reverse justify-start 
-              w-[95%] max-w-[800px] bg-white shadow-lg rounded-md "
+                md:flex-row-reverse justify-start 
+                w-[95%] max-w-[800px] bg-white shadow-lg rounded-md "
         >
           <div className="form-image md:w-1/2">
             <img
@@ -66,7 +70,7 @@ const Form = () =>{
                 name="name"
                 id="name"
                 className="border border-gray-400 p-1 rounded-sm block w-[80%] 
-                focus:outline-emerald-500"
+                  focus:outline-emerald-500"
                 value={values.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -89,7 +93,7 @@ const Form = () =>{
                 name="email"
                 id="email"
                 className="border border-gray-400 p-1 rounded-sm block w-[80%]
-                focus:outline-emerald-500"
+                  focus:outline-emerald-500"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -112,7 +116,7 @@ const Form = () =>{
               <select
                 name="country"
                 className="border border-gray-400 p-1 rounded-sm 
-                block w-[80%] focus:outline-emerald-500"
+                  block w-[80%] focus:outline-emerald-500"
                 value={values.country}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -126,44 +130,45 @@ const Form = () =>{
             </div>
 
             {/* Checkbox option */}
-            <label className={`block text-[14px] ${
-                  errors.checkbox && touched.checkbox ? "text-red-500" : null
-                }`}>
-                     {`${
-                  errors.checkbox && touched.checkbox
-                    ? errors.checkbox
-                    : "Terms and Condition"
-                }`}
-                </label>
+            <label
+              className={`block text-[14px] ${
+                errors.checkbox && touched.checkbox ? "text-red-500" : null
+              }`}
+            >
+              {`${
+                errors.checkbox && touched.checkbox
+                  ? errors.checkbox
+                  : "Terms and Condition"
+              }`}
+            </label>
             <div className="terms-service my-3 flex gap-3">
-
               <input
                 type="checkbox"
                 id="check"
                 name="checkbox"
                 value="checked"
                 className="border border-gray-400 p-2 
-                block w-fu focus:outline-emerald-500 checked:accent-emerald-500 checked:color-white"
+                  block w-fu focus:outline-emerald-500 checked:accent-emerald-500 checked:color-white"
                 onChange={handleChange}
               ></input>
               <label htmlFor="check" className="block text-[14px]">
                 I accept all agrement
               </label>
             </div>
-  
+
             {/* submit button */}
             <input
               type="submit"
               value="Start learning today"
               className="border border-gray-400 p-1 rounded-sm block w-[80%]
-               bg-emerald-500 text-white cursor-pointer border-none
-               hover:bg-emerald-700 hover:transition-all hover:delay-75"
+                bg-emerald-500 text-white cursor-pointer border-none
+                hover:bg-emerald-700 hover:transition-all hover:delay-75"
             />
           </form>
         </div>
       </section>
     </>
   );
-}
+};
 
 export default Form;
