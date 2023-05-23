@@ -2,10 +2,13 @@ import Image from "./assets/Images/Side.jpg";
 import { useFormik } from "formik";
 import FormValidation from "./Schema";
 import { useNavigate } from "react-router-dom";
-import { createContext } from "react";
-export const userContext = createContext(null);
+import FormContext from './context/Context';
+import { useContext } from "react";
 
-const Form = ({Children}) => {
+
+const Form = () => {
+  const {chageState} = useContext(FormContext);
+
   const navigate = useNavigate();
   const { values, handleSubmit, handleChange, errors, touched, handleBlur } =
     useFormik({
@@ -17,6 +20,7 @@ const Form = ({Children}) => {
       },
 
       onSubmit: (value) => {
+        chageState(value);
         navigate(`/sucess`);
       },
 
@@ -26,9 +30,6 @@ const Form = ({Children}) => {
 
   return (
     <>
-    <userContext.Provider value={values}>
-      {Children}
-    </userContext.Provider>  
       <section className="container h-screen min-w-full bg-emerald-500 flex justify-center items-center">
         {/* Side image secton */}
 
